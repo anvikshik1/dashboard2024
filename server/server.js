@@ -5,8 +5,15 @@ const Connectdb = require('./utils/db');
 const errorMiddleware = require('./middlewares/error-middleware');
 const contactRoute = require('./router/contact-router');
 require('dotenv').config();
+const cors = require('cors') 
 
+// var corsOptions = {
+//     origin: 'http://localhost/5173',
+//     methods:"HEAD, PATCH , GET , POST, DELETE, PUT",
+//     credential:true
+// }
 
+app.use(cors());
 app.use(express.json());
 app.use("/api/auth",authRoute);
 app.use("/api/form",contactRoute);

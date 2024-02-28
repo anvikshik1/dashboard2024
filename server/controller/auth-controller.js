@@ -1,5 +1,6 @@
 const User = require("../models/user-models");
 
+
 const home = async (req,res) => {
     try {
         res.status(200).send('welcome to new router');
@@ -29,7 +30,7 @@ const register = async (req,res) => {
 
 const login = async (req,res) => {
     try {
-        const {email,password} = req.body;
+        const {email, password} = req.body;
         const userExist = await User.findOne({email});
         if(!userExist){
             return res.status(400).send({msg: "Invalid credentials"})
@@ -49,4 +50,13 @@ const login = async (req,res) => {
     }
 }
 
-module.exports = {home, register, login};
+const users = async (req,res) => {
+    try {
+        const userData = req.user;
+        return res.status(200).json({ userData })
+    } catch (error) {
+         console.log(`Error from the use route ${error}`);
+    }
+}
+
+module.exports = {home, register, login, users};

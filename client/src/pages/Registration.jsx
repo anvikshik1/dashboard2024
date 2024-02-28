@@ -1,6 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import {json, useNavigate} from "react-router-dom";
+import { useAuth } from '../store/auth';
+
 
 const Registration = () => {
+  const navigate = useNavigate();
+  const {storetokenInLS} = useAuth();
   const [user, setUser] =useState({
     username:"",
     email:"",
@@ -18,11 +23,35 @@ const Registration = () => {
     })
 
   }
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(user);
-    
+    try {
+      const response  = await fetch(`http://localhost:5000/api/auth/register`,{
+        method:"POST",
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(user)
+      });
+      console.log("response",response);
+      console.log("response",response.json());
+
+      if(response.ok){
+        const res_data = await response.json();
+        console.log(res_data);
+        storetokenInLS(res_data.token)
+        // useState({username:"",email:"",phone:"",password:""});
+        navigate('/login');
+      }else{
+        alert("Not a valid registration")
+      }
+    } catch (error) {
+      console.log("register",error);
+    }
   }
+
+
   return (
     <section>
     <main>

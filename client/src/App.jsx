@@ -13,6 +13,7 @@ import Service from './pages/Service';
 import Navbar from './components/Navbar';
 import Error from './pages/Error';
 import Footer from './components/Footer/Footer';
+import Logout from './pages/Logout';
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/about' element={<About/>}/>
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/service' element={<Service/>}/>
+        <Route path='/logout' element={<Logout/>}/>
         <Route path='/registration' element={<Registration/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='*' element={<Error/>}/>

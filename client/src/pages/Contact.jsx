@@ -1,17 +1,33 @@
 import React, { useState } from 'react';
+import { useAuth } from '../store/auth';
+
+
+const defaultContactForm ={
+  username: "",
+  email: "",
+  message: "",
+}
 
 const Contact = () => {
-  const [contact, setContact] = useState({
-    username: "",
-    email: "",
-    message: "",
-  });
+  const [contact, setContact] = useState(defaultContactForm);
+  const [userData,setUserData] = useState(true)
+
+  const {user} = useAuth();
+
+
+  if(userData && user){
+    setContact({
+      username: user.username,
+      email: user.email,
+      message:"",
+    });
+    setUserData(false);
+  }
 
   // lets tackle our handleInput
   const handleInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-
     setContact({
       ...contact,
       [name]: value,
@@ -19,10 +35,27 @@ const Contact = () => {
   };
 
   // handle fomr getFormSubmissionInfo
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(contact);
+    try {
+      const response = await fetch("http://localhost:5000/api/form/contact",{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(contact)
+      });
+      if(response.ok){
+        setContact(defaultContactForm);
+        const result = await response.json();
+        console.log(result);
+        alert("message sent successfully")
+      }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
   };
   return (
     <section className="section-contact">
@@ -50,7 +83,6 @@ const Contact = () => {
               required
             />
           </div>
-
           <div>
             <label htmlFor="email">email</label>
             <input
@@ -63,7 +95,6 @@ const Contact = () => {
               required
             />
           </div>
-
           <div>
             <label htmlFor="message">message</label>
             <textarea
@@ -77,7 +108,6 @@ const Contact = () => {
               rows="6"
             ></textarea>
           </div>
-
           <div>
             <button type="submit">submit</button>
           </div>
@@ -99,4 +129,4 @@ const Contact = () => {
   )
 }
 
-export default Contact
+export default Contact;

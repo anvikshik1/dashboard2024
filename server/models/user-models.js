@@ -34,7 +34,7 @@ userScheema.pre('save',async function () {
     try {
         const saltRound = await bcrypt.genSalt(10);
         const hash_passwd = await bcrypt.hash(user.password, saltRound);
-        user.password = hash_passwd
+        user.password = hash_passwd;
     } catch (error) {
         next(error)
     }
@@ -46,12 +46,11 @@ userScheema.methods.generateToken = async function() {
             userId: this._id.toString(),
             email: this.email,
             isAdmin: this.isAdmin,
-        },process.env.JWT_SECRET_KEY,{expiresIn:'2d'})
+        },process.env.JWT_SECRET_KEY,{expiresIn:'2d'});
     } catch (error) {
         console.error(error);
     }
 }
-
 
 //compare the password
 
